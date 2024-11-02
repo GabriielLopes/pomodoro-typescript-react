@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="App">
       <h2>Olá mundo!</h2>
-      <PomodoroTimer tempoPadraoPomodoro={1500} />
+      <PomodoroTimer tempoPadraoPomodoro={3600} />
     </div>
   );
 }
