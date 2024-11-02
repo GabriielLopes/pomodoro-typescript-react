@@ -1,0 +1,29 @@
+.btn {
+  background-color: #41e1ba;
+  color: black;
+  text-transform: uppercase;
+  width: 120px;
+  padding: 10px;
+  border: none;
+  box-shadow: 2px 2px 8px 2px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #45d8b3;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.working .pomodoro .btn {
+  background-color: #EF5D50;
+  color: white;
+}
+
+.working .pomodoro .btn:hover {
+  background-color: #dd5549;
+}

@@ -1,0 +1,17 @@
+.pomodoro {
+  background-color: white;
+  box-shadow: 2px 2px 8px 2px rgba(0, 0, 0, 0.2);
+  margin-top: 50px;
+  padding: 25px;
+  border-radius: 8px;
+}
+
+.pomodoro h2 {
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.pomodoro .details {
+  margin: 20px 0;
+}
+

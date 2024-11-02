@@ -1,0 +1,38 @@
+.containerTimer {
+  margin: 0 auto;
+  height: 300px;
+  width: 300px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circulo {
+  background: conic-gradient( #41e1ba 360deg, #e5e7eb 0deg);
+  height: 250px;
+  width: 250px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circulo:before {
+  content: "";
+  position: absolute;
+  height: 210px;
+  width: 210px;
+  background-color: #fff;
+  border-radius: 50%;
+}
+
+.valor {
+  position: relative;
+  font-size: 35px;
+  font-family: sans-serif;
+}
+
+.working .pomodoro .circulo {
+  background: conic-gradient( #EF5D50 360deg, #e5e7eb 0deg)
+}

@@ -1,12 +1,11 @@
 import React from 'react';
-import './app.css';
+import './styles/app.css';
 import { PomodoroTimer } from './components/pomodoro-timer';
 
 function App() {
   return (
-    <div className="App">
-      <h2>Olá mundo!</h2>
-      <PomodoroTimer tempoPadraoPomodoro={3600} />
+    <div className="container">
+      <PomodoroTimer tempoPomodoro={1500} tempoDeDescansoCurto={300} tempoDeDescansoLongo={900} ciclos={4} />
     </div>
   );
 }

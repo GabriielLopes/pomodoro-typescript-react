@@ -1,0 +1,26 @@
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #41e1ba;
+  font-family: sans-serif;
+  transition: background-color 300ms ease-in-out;
+  line-height: 1.5;
+}
+
+.working {
+  background: #EF5D50;
+}
+
+.container {
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.hidden {
+  display: none;
+}
