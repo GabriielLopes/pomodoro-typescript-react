@@ -5,6 +5,12 @@ import { Timer } from './timer';
 
 //CSS
 import '../styles/pomodoro.css';
+// Efeitos sonoros
+const bellStart = require('../sounds/bell-start.mp3');
+const bellFinish = require('../sounds/bell-finish.mp3');
+
+const audioStartTrabalhando = new Audio(bellStart);
+const audioStopTrabalhando = new Audio(bellFinish);
 
 interface Props {
   tempoPomodoro: number;
@@ -55,6 +61,7 @@ export function PomodoroTimer(props: Props): JSX.Element {
     setTempoPrincipal(props.tempoPomodoro);
     setGraus(360);
     setGrausPDiminuir(360 / props.tempoPomodoro);
+    audioStartTrabalhando.play();
   };
 
   const configurarDescansar = (longo: boolean) => {
@@ -71,6 +78,8 @@ export function PomodoroTimer(props: Props): JSX.Element {
       setGraus(360);
       setGrausPDiminuir(360 / props.tempoDeDescansoCurto);
     }
+
+    audioStopTrabalhando.play();
   };
 
   return (
