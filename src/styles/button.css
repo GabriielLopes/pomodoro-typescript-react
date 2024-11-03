@@ -1,12 +1,18 @@
 .btn {
+  display: flex;
   background-color: #41e1ba;
   color: black;
   text-transform: uppercase;
   width: 120px;
+  max-height: 35px;
+  max-width: 120px;
   padding: 10px;
   border: none;
   box-shadow: 2px 2px 8px 2px rgba(0, 0, 0, 0.2);
   cursor: pointer;
+  text-align: center;
+  justify-items: center;
+  justify-content: space-around;
   transition: background-color 300ms ease-in-out;
 }
 
@@ -27,4 +33,8 @@
 
 .working .pomodoro .btn:hover {
   background-color: #dd5549;
+}
+
+.btn .bx {
+  font-size: 18px;
 }

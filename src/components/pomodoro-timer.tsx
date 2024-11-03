@@ -79,11 +79,12 @@ export function PomodoroTimer(props: Props): JSX.Element {
       <Timer tempoPrincipal={tempoPrincipal} />
 
       <div className="controls">
-        <Button className="btn" texto="Trabalhar" onClick={() => configurarTrabalhar()} />
-        <Button className="btn" texto="Descansar" onClick={() => configurarDescansar(false)} />
+        <Button className="btn" texto="Trabalhar" icone='bx bxs-briefcase-alt-2' onClick={() => configurarTrabalhar()} />
+        <Button className="btn" texto="Descansar" icone='bx bx-alarm-snooze' onClick={() => configurarDescansar(false)} />
           <Button
             className={trabalhando || descansando ? "btn" : "hidden"}
             texto={contagemTempo ? 'Pausar' : 'Continuar'}
+            icone={contagemTempo ? 'bx bx-pause' : 'bx bx-play'}
             onClick={() => setContagemTempo(!contagemTempo)}
           />
       </div>
