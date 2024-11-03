@@ -18,24 +18,23 @@ export function PomodoroTimer(props: Props): JSX.Element {
   const [graus, setGraus] = useState(360);
   const [contagemTempo, setContagemTempo] = useState(false);
   const [trabalhando, setTrabalhando] = useState(false);
+  const [descansando, setDescansando] = useState(false);
+  const [grausPdiminuir, setGrausPDiminuir] = useState(360 / props.tempoPomodoro);
+
   const circulo = document.querySelector('.circulo') as HTMLDivElement;
 
   useInterval(
     () => {
       setTempoPrincipal((prevTempo) => prevTempo - 1);
-      const qtdePDiminuir = 360 / props.tempoPomodoro;
-      setGraus(graus - qtdePDiminuir);
+      setGraus(graus - grausPdiminuir);
     },
     contagemTempo ? 1000 : null,
   );
 
   useEffect(() => {
-    if (trabalhando) {
-      document.body.classList.add('working');
-    } else {
-      document.body.classList.remove('working');
-    }
-  }, [trabalhando]);
+    if (trabalhando) document.body.classList.add('working');
+    if (descansando) document.body.classList.remove('working');
+  }, [trabalhando, descansando]);
 
   useEffect(() => {
     if (circulo) {
@@ -47,11 +46,31 @@ export function PomodoroTimer(props: Props): JSX.Element {
         circulo.style.transition = `background 300ms ease-in-out`;
       }
     }
-  }, [tempoPrincipal, graus, circulo, trabalhando]);
+  }, [tempoPrincipal, graus, circulo, trabalhando, descansando, contagemTempo]);
 
   const configurarTrabalhar = () => {
-    setTrabalhando(!trabalhando);
+    setTrabalhando(true);
+    setDescansando(false);
     setContagemTempo(true);
+    setTempoPrincipal(props.tempoPomodoro);
+    setGraus(360);
+    setGrausPDiminuir(360 / props.tempoPomodoro);
+  };
+
+  const configurarDescansar = (longo: boolean) => {
+    setDescansando(true);
+    setTrabalhando(false);
+    setContagemTempo(true);
+
+    if (longo) {
+      setTempoPrincipal(props.tempoDeDescansoLongo);
+      setGraus(360);
+      setGrausPDiminuir(360 / props.tempoDeDescansoLongo);
+    } else {
+      setTempoPrincipal(props.tempoDeDescansoCurto);
+      setGraus(360);
+      setGrausPDiminuir(360 / props.tempoDeDescansoCurto);
+    }
   };
 
   return (
@@ -60,19 +79,13 @@ export function PomodoroTimer(props: Props): JSX.Element {
       <Timer tempoPrincipal={tempoPrincipal} />
 
       <div className="controls">
-        <Button
-          className="btn"
-          texto="Trabalhar"
-          onClick={() => configurarTrabalhar()}
-        />
-        <Button className="btn" texto="teste" onClick={() => console.log('teste')} />
-        {trabalhando ? (
+        <Button className="btn" texto="Trabalhar" onClick={() => configurarTrabalhar()} />
+        <Button className="btn" texto="Descansar" onClick={() => configurarDescansar(false)} />
           <Button
-          className="btn"
-          texto={contagemTempo ? 'Pausar' : 'Continuar'}
-          onClick={() => setContagemTempo(!contagemTempo)}
-        />
-        ) : ""}
+            className={trabalhando || descansando ? "btn" : "hidden"}
+            texto={contagemTempo ? 'Pausar' : 'Continuar'}
+            onClick={() => setContagemTempo(!contagemTempo)}
+          />
       </div>
 
       <div className="details">
