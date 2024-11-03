@@ -16,7 +16,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: background 1000ms ease-in-out;
+  transition: background-color 500ms ease-in-out;
 }
 
 .circulo:before {
@@ -26,6 +26,7 @@
   width: 210px;
   background-color: #fff;
   border-radius: 50%;
+  transition: background-color 500ms ease-in-out;
 }
 
 .valor {
@@ -35,5 +36,6 @@
 }
 
 .working .circulo {
-  background: conic-gradient( #EF5D50 360deg, #e5e7eb 0deg)
+  background: conic-gradient( #EF5D50 360deg, #e5e7eb 0deg);
+  transition: background-color 500ms ease-in-out;
 }
