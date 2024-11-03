@@ -16,6 +16,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: background 1000ms ease-in-out;
 }
 
 .circulo:before {
@@ -33,6 +34,6 @@
   font-family: sans-serif;
 }
 
-.working .pomodoro .circulo {
+.working .circulo {
   background: conic-gradient( #EF5D50 360deg, #e5e7eb 0deg)
 }
