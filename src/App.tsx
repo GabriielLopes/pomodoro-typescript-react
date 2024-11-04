@@ -5,7 +5,7 @@ import { PomodoroTimer } from './components/pomodoro-timer';
 function App() {
   return (
     <div className="container">
-      <PomodoroTimer tempoPomodoro={1500} tempoDeDescansoCurto={300} tempoDeDescansoLongo={600} ciclos={4} />
+      <PomodoroTimer tempoPomodoro={1500} tempoDeDescansoCurto={300} tempoDeDescansoLongo={900} ciclos={4} />
     </div>
   );
 }

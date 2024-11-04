@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useInterval } from '../hooks/use-interval';
 import { Button } from './button';
 import { Timer } from './timer';
 
 //CSS
 import '../styles/pomodoro.css';
+import { segundosParaTempo } from '../utils/segundos-para-tempo';
 // Efeitos sonoros
 const bellStart = require('../sounds/bell-start.mp3');
 const bellFinish = require('../sounds/bell-finish.mp3');
@@ -27,12 +28,16 @@ export function PomodoroTimer(props: Props): JSX.Element {
   const [descansando, setDescansando] = useState(false);
   const [ciclos, setCiclos] = useState(1);
   const [grausPdiminuir, setGrausPDiminuir] = useState(360 / props.tempoPomodoro);
+  const [pomodoroCompletados, setPomodoroCompletados] = useState(0);
+  const [totalDeHorasTrabalhadas, setTotalDeHorasTrabalhadas] = useState(0);
+  const [ciclosCompletados, setCiclosCompletados] = useState(0);
 
   const circulo = document.querySelector('.circulo') as HTMLDivElement;
 
   useInterval(
     () => {
       setTempoPrincipal((prevTempo) => prevTempo - 1);
+      if (trabalhando) setTotalDeHorasTrabalhadas(totalDeHorasTrabalhadas + 1);
       setGraus(graus - grausPdiminuir);
     },
     contagemTempo ? 1000 : null,
@@ -57,22 +62,24 @@ export function PomodoroTimer(props: Props): JSX.Element {
 
   // REGRAS POMODORO
   useEffect(() => {
-    if (tempoPrincipal === 0 && trabalhando && ciclos <= 4) {
+    if (tempoPrincipal === 0 && trabalhando && ciclos <= props.ciclos) {
       configurarDescansar(false);
+      setPomodoroCompletados(pomodoroCompletados + 1);
       setCiclos(ciclos + 1);
     }
 
-    if (tempoPrincipal === 0 && descansando && ciclos <=4) {
+    if (tempoPrincipal === 0 && descansando && ciclos <= props.ciclos) {
       configurarTrabalhar();
     }
-
-    if (ciclos > 4) {
+    if (ciclos > props.ciclos) {
+      setCiclosCompletados(ciclosCompletados + 1);
       setCiclos(1);
       configurarDescansar(true);
     }
-  }, [tempoPrincipal, trabalhando, descansando, ciclos]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tempoPrincipal, trabalhando, descansando, ciclos, props.ciclos, props.tempoPomodoro, ciclosCompletados, totalDeHorasTrabalhadas, pomodoroCompletados]);
 
-  const configurarTrabalhar = () => {
+  const configurarTrabalhar = useCallback(() => {
     setTrabalhando(true);
     setDescansando(false);
     setContagemTempo(true);
@@ -80,9 +87,9 @@ export function PomodoroTimer(props: Props): JSX.Element {
     setGraus(360);
     setGrausPDiminuir(360 / props.tempoPomodoro);
     audioStartTrabalhando.play();
-  };
+  }, [props.tempoPomodoro]);
 
-  const configurarDescansar = (longo: boolean) => {
+  const configurarDescansar = useCallback((longo: boolean) => {
     setDescansando(true);
     setTrabalhando(false);
     setContagemTempo(true);
@@ -98,7 +105,7 @@ export function PomodoroTimer(props: Props): JSX.Element {
     }
 
     audioStopTrabalhando.play();
-  };
+  }, [props.tempoDeDescansoCurto, props.tempoDeDescansoLongo]);
 
   return (
     <div className="pomodoro">
@@ -127,7 +134,15 @@ export function PomodoroTimer(props: Props): JSX.Element {
       </div>
 
       <div className="details">
-        <p>{}</p>
+        <p>
+          Ciclos finalizados: <strong>{ciclosCompletados}</strong>
+        </p>
+        <p>
+          Pomodoros finalizados: <strong>{pomodoroCompletados}</strong>
+        </p>
+        <p>
+          Total de horas trabalhadas: <strong>{segundosParaTempo(totalDeHorasTrabalhadas)}</strong>
+        </p>
       </div>
     </div>
   );
