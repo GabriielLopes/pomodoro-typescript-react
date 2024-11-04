@@ -25,6 +25,7 @@ export function PomodoroTimer(props: Props): JSX.Element {
   const [contagemTempo, setContagemTempo] = useState(false);
   const [trabalhando, setTrabalhando] = useState(false);
   const [descansando, setDescansando] = useState(false);
+  const [ciclos, setCiclos] = useState(1);
   const [grausPdiminuir, setGrausPDiminuir] = useState(360 / props.tempoPomodoro);
 
   const circulo = document.querySelector('.circulo') as HTMLDivElement;
@@ -53,6 +54,23 @@ export function PomodoroTimer(props: Props): JSX.Element {
       }
     }
   }, [tempoPrincipal, graus, circulo, trabalhando, descansando, contagemTempo]);
+
+  // REGRAS POMODORO
+  useEffect(() => {
+    if (tempoPrincipal === 0 && trabalhando && ciclos <= 4) {
+      configurarDescansar(false);
+      setCiclos(ciclos + 1);
+    }
+
+    if (tempoPrincipal === 0 && descansando && ciclos <=4) {
+      configurarTrabalhar();
+    }
+
+    if (ciclos > 4) {
+      setCiclos(1);
+      configurarDescansar(true);
+    }
+  }, [tempoPrincipal, trabalhando, descansando, ciclos]);
 
   const configurarTrabalhar = () => {
     setTrabalhando(true);
@@ -88,18 +106,28 @@ export function PomodoroTimer(props: Props): JSX.Element {
       <Timer tempoPrincipal={tempoPrincipal} />
 
       <div className="controls">
-        <Button className="btn" texto="Trabalhar" icone='bx bxs-briefcase-alt-2' onClick={() => configurarTrabalhar()} />
-        <Button className="btn" texto="Descansar" icone='bx bx-alarm-snooze' onClick={() => configurarDescansar(false)} />
-          <Button
-            className={trabalhando || descansando ? "btn" : "hidden"}
-            texto={contagemTempo ? 'Pausar' : 'Continuar'}
-            icone={contagemTempo ? 'bx bx-pause' : 'bx bx-play'}
-            onClick={() => setContagemTempo(!contagemTempo)}
-          />
+        <Button
+          className="btn"
+          texto="Trabalhar"
+          icone="bx bxs-briefcase-alt-2"
+          onClick={() => configurarTrabalhar()}
+        />
+        <Button
+          className="btn"
+          texto="Descansar"
+          icone="bx bx-alarm-snooze"
+          onClick={() => configurarDescansar(false)}
+        />
+        <Button
+          className={trabalhando || descansando ? 'btn' : 'hidden'}
+          texto={contagemTempo ? 'Pausar' : 'Continuar'}
+          icone={contagemTempo ? 'bx bx-pause' : 'bx bx-play'}
+          onClick={() => setContagemTempo(!contagemTempo)}
+        />
       </div>
 
       <div className="details">
-        <p>teste</p>
+        <p>{}</p>
       </div>
     </div>
   );
