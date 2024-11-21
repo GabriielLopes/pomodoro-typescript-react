@@ -76,8 +76,32 @@ export function PomodoroTimer(props: Props): JSX.Element {
       setCiclos(1);
       configurarDescansar(true);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tempoPrincipal, trabalhando, descansando, ciclos, props.ciclos, props.tempoPomodoro, ciclosCompletados, totalDeHorasTrabalhadas, pomodoroCompletados]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    tempoPrincipal,
+    trabalhando,
+    descansando,
+    ciclos,
+    props.ciclos,
+    props.tempoPomodoro,
+    ciclosCompletados,
+    totalDeHorasTrabalhadas,
+    pomodoroCompletados,
+  ]);
+
+  function notificarTrabalho() {
+    return new Notification('Pomodoro timer', {
+      body: 'Você deve ir trabalhar!',
+      requireInteraction: true
+    });
+  }
+
+  function notificarDescansar() {
+    return new Notification('Pomodoro timer', {
+      body: 'Você deve descansar!',
+      requireInteraction: true
+    });
+  }
 
   const configurarTrabalhar = useCallback(() => {
     setTrabalhando(true);
@@ -87,25 +111,42 @@ export function PomodoroTimer(props: Props): JSX.Element {
     setGraus(360);
     setGrausPDiminuir(360 / props.tempoPomodoro);
     audioStartTrabalhando.play();
+    Notification.requestPermission().then((result) => {
+      if (result === 'granted') {
+        notificarTrabalho();
+      } else {
+        window.alert('Você precisa permitir notificações para continuar.');
+      }
+    });
   }, [props.tempoPomodoro]);
 
-  const configurarDescansar = useCallback((longo: boolean) => {
-    setDescansando(true);
-    setTrabalhando(false);
-    setContagemTempo(true);
+  const configurarDescansar = useCallback(
+    (longo: boolean) => {
+      setDescansando(true);
+      setTrabalhando(false);
+      setContagemTempo(true);
 
-    if (longo) {
-      setTempoPrincipal(props.tempoDeDescansoLongo);
-      setGraus(360);
-      setGrausPDiminuir(360 / props.tempoDeDescansoLongo);
-    } else {
-      setTempoPrincipal(props.tempoDeDescansoCurto);
-      setGraus(360);
-      setGrausPDiminuir(360 / props.tempoDeDescansoCurto);
-    }
+      if (longo) {
+        setTempoPrincipal(props.tempoDeDescansoLongo);
+        setGraus(360);
+        setGrausPDiminuir(360 / props.tempoDeDescansoLongo);
+      } else {
+        setTempoPrincipal(props.tempoDeDescansoCurto);
+        setGraus(360);
+        setGrausPDiminuir(360 / props.tempoDeDescansoCurto);
+      }
 
-    audioStopTrabalhando.play();
-  }, [props.tempoDeDescansoCurto, props.tempoDeDescansoLongo]);
+      audioStopTrabalhando.play();
+      Notification.requestPermission().then((result) => {
+        if (result === 'granted') {
+          notificarDescansar();
+        } else {
+          window.alert('Você precisa permitir notificações para continuar.');
+        }
+      });
+    },
+    [props.tempoDeDescansoCurto, props.tempoDeDescansoLongo],
+  );
 
   return (
     <div className="pomodoro">
